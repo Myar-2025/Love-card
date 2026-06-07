@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>سؤال خاص ❤️</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #ffe6e6;
             display: flex;
             justify-content: center;
@@ -14,26 +14,35 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            touch-action: manipulation;
         }
         .card {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 40px 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(214, 48, 49, 0.15);
             text-align: center;
             width: 85%;
-            max-width: 350px;
+            max-width: 340px;
+            position: relative; /* ضروري لضبط حركة زر لا داخل الكرت */
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         h1 {
             color: #d63031;
             font-size: 24px;
             margin-bottom: 40px;
+            line-height: 1.5;
         }
         .buttons {
             display: flex;
             justify-content: space-around;
+            align-items: center;
             position: relative;
             height: 60px;
+            width: 100%;
         }
         button {
             padding: 12px 28px;
@@ -42,44 +51,54 @@
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.1s ease;
         }
         #yesBtn {
             background-color: #2ecc71;
             color: white;
-            z-index: 10;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
         }
         #noBtn {
             background-color: #e74c3c;
             color: white;
             position: absolute;
-            transition: all 0.1s ease;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+            will-change: transform;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- ✏️ يمكنك مسح جملة "هل تحبينني؟" واكتب سؤالك هنا -->
-        <h1 id="question">ننوش عمرااي بتحبيني؟ ❤️🫣</h1>
+        <h1 id="question">ننوش بتحبيني❤️🫣</h1>
         <div class="buttons">
             <button id="yesBtn" onclick="sayYes()">نعم</button>
-            <button id="noBtn" ontouchstart="moveButton()" onmouseover="moveButton()">لا</button>
+            <button id="noBtn" ontouchstart="moveButton(e)" onmouseover="moveButton(e)">لا</button>
         </div>
     </div>
 
     <script>
-        function moveButton() {
+        function moveButton(e) {
+            if(e) e.preventDefault();
             const noBtn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            const card = document.querySelector('.card');
+            
+            // حساب الحدود الداخلية للكرت الأبيض لضمان بقاء زر "لا" ظاهراً ويهرب بالداخل فقط
+            const padding = 20;
+            const maxX = card.clientWidth - noBtn.offsetWidth - padding;
+            const maxY = card.clientHeight - noBtn.offsetHeight - padding;
+            
+            // توليد إحداثيات عشوائية آمنة داخل الكرت
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
 
         function sayYes() {
-            // ✏️ يمكنك تغيير رسالة النجاح والقبول من هنا
-            document.getElementById('question').innerHTML = "كنت بعرف اصلاً وانا كمااان ❤️🫂";
+            // النص الجديد عند الضغط على نعم
+            document.getElementById('question').innerHTML = "بعرف اصلاً وانا بعشقك🫂❤️";
             document.querySelector('.buttons').style.display = 'none';
         }
     </script>
