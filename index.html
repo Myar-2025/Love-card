@@ -24,8 +24,8 @@
             text-align: center;
             width: 85%;
             max-width: 340px;
-            position: relative; /* ضروري لضبط حركة زر لا داخل الكرت */
-            min-height: 200px;
+            position: relative;
+            min-height: 250px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -36,12 +36,9 @@
             margin-bottom: 40px;
             line-height: 1.5;
         }
-        .buttons {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+        .buttons-container {
             position: relative;
-            height: 60px;
+            height: 120px; /* مساحة كافية للتحرك بحرية */
             width: 100%;
         }
         button {
@@ -51,19 +48,23 @@
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.1s ease;
         }
         #yesBtn {
             background-color: #2ecc71;
             color: white;
             box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            position: absolute;
+            left: 20px;
+            top: 40px;
         }
         #noBtn {
             background-color: #e74c3c;
             color: white;
             position: absolute;
+            right: 20px;
+            top: 40px;
             box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
-            will-change: transform;
+            transition: all 0.1s ease;
         }
     </style>
 </head>
@@ -71,9 +72,9 @@
 
     <div class="card">
         <h1 id="question">ننوش بتحبيني❤️🫣</h1>
-        <div class="buttons">
+        <div class="buttons-container">
             <button id="yesBtn" onclick="sayYes()">نعم</button>
-            <button id="noBtn" ontouchstart="moveButton(e)" onmouseover="moveButton(e)">لا</button>
+            <button id="noBtn" ontouchstart="moveButton(event)" onmouseover="moveButton(event)">لا</button>
         </div>
     </div>
 
@@ -81,25 +82,22 @@
         function moveButton(e) {
             if(e) e.preventDefault();
             const noBtn = document.getElementById('noBtn');
-            const card = document.querySelector('.card');
+            const container = document.querySelector('.buttons-container');
             
-            // حساب الحدود الداخلية للكرت الأبيض لضمان بقاء زر "لا" ظاهراً ويهرب بالداخل فقط
-            const padding = 20;
-            const maxX = card.clientWidth - noBtn.offsetWidth - padding;
-            const maxY = card.clientHeight - noBtn.offsetHeight - padding;
+            // حصر الحركة تماماً داخل حاوية الأزرار لمنع التداخل والتعليق
+            const maxX = container.clientWidth - noBtn.offsetWidth;
+            const maxY = container.clientHeight - noBtn.offsetHeight;
             
-            // توليد إحداثيات عشوائية آمنة داخل الكرت
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
             
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
         function sayYes() {
-            // النص الجديد عند الضغط على نعم
             document.getElementById('question').innerHTML = "بعرف اصلاً وانا بعشقك🫂❤️";
-            document.querySelector('.buttons').style.display = 'none';
+            document.querySelector('.buttons-container').style.display = 'none';
         }
     </script>
 
